@@ -25,7 +25,7 @@ def image_paths(root):
     return image_paths
 
 image_paths = image_paths("SMILEs")
-IMG_SIZE = (32,32)
+IMG_SIZE = [32,32]
 
 def load_dataset(image_paths, target_size = IMG_SIZE):
     
@@ -44,3 +44,33 @@ def load_dataset(image_paths, target_size = IMG_SIZE):
     return np.array(data) / 255.0, np.array(labels)
         
 data, labels = load_dataset(image_paths)
+
+
+def build_model(input_shape = IMG_SIZE + [1]):
+    model = Sequential([
+        Conv2D(filters=32,
+               kernel_size=(3,3),
+               activation="relu",
+               padding="same",
+               input_shape=input_shape),
+        MaxPool2D(2,2),
+        Conv2D(filters=64,
+               kernel_size=(3,3),
+               activation="relu",
+               padding="same",
+               input_shape=input_shape),
+        MaxPool2D(2,2),
+        Flatten(),
+        Dense(256,activation="relu"),
+        Dense(1, activation="sigmoid")
+    ])
+    
+    model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
+    return model
+
+labels, counts = np.unique(labels,return_counts=True)
+
+counts = max(counts)/counts
+
+print(labels)
+print(counts)
