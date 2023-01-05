@@ -71,6 +71,23 @@ def build_model(input_shape = IMG_SIZE + [1]):
 labels, counts = np.unique(labels,return_counts=True)
 
 counts = max(counts)/counts
+class_weights = dict(zip(labels,counts))
 
-print(labels)
-print(counts)
+(X_train, X_test, y_train, y_test) = train_test_split(data, labels,
+                                                      test_size=0.2,
+                                                      stratify=labels,
+                                                      random_state=42)
+
+(X_train, X_valid, y_train, y_valid) = train_test_split(X_train, y_train,
+                                                      test_size=0.2,
+                                                      stratify=y_train,
+                                                      random_state=42) 
+
+model = build_model()
+EPOCHS = 20
+history = model.fit(X_train, y_train,
+                    validation_data=(X_valid,y_valid),
+                    class_weight=class_weights,
+                    batch_size=64,
+                    epochs=EPOCHS)
+model.save("model")
