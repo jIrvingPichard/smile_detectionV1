@@ -1,7 +1,7 @@
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.preprocessing.image import img_to_array
-#from tensorflow.keras.utils import load_img
-from keras.preprocessing.image import load_img
+from tensorflow.keras.utils import load_img
+#from keras.preprocessing.image import load_img
 from tensorflow.keras import Sequential
 from tensorflow.keras.layers import Conv2D
 from tensorflow.keras.layers import MaxPool2D
@@ -91,3 +91,27 @@ history = model.fit(X_train, y_train,
                     batch_size=64,
                     epochs=EPOCHS)
 model.save("model")
+
+import matplotlib.pyplot as plt
+
+acc = history.history['accuracy']
+val_acc = history.history['val_accuracy']
+
+loss = history.history['loss']
+val_loss = history.history['val_loss']
+
+plt.plot(range(EPOCHS), acc, "b", label="Training Accuracy")
+plt.plot(range(EPOCHS), val_acc, "r", label="Validation Accuracy")
+plt.legend()
+
+plt.figure()
+
+plt.plot(range(EPOCHS), loss, "g", label="Training Loss")
+plt.plot(range(EPOCHS), val_loss, "orange", label="Validation Loss")
+plt.legend()
+
+plt.show()
+
+test_loss, test_accuracy = model.evaluate(X_test, y_test)
+print("test loss: ", test_loss)
+print("test accuracy: ", test_accuracy)
