@@ -1,4 +1,3 @@
-from sklearn.model_selection import train_test_split
 from tensorflow.keras.preprocessing.image import img_to_array
 from tensorflow.keras.utils import load_img
 #from keras.preprocessing.image import load_img
@@ -7,6 +6,7 @@ from tensorflow.keras.layers import Conv2D
 from tensorflow.keras.layers import MaxPool2D
 from tensorflow.keras.layers import Flatten
 from tensorflow.keras.layers import Dense
+from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 import numpy as np
 import os
@@ -70,7 +70,7 @@ def build_model(input_shape = IMG_SIZE + [1]):
 
 labels, counts = np.unique(labels,return_counts=True)
 
-counts = max(counts)/counts
+counts = max(counts,default=None)/counts
 class_weights = dict(zip(labels,counts))
 
 (X_train, X_test, y_train, y_test) = train_test_split(data, labels,
